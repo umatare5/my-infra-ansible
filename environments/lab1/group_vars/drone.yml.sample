@@ -1,0 +1,22 @@
+# general
+drone_server_enable: "true"
+drone_server_version: "2.9.1"
+drone_ssh_runner_enable: "true"
+drone_ssh_runner_version: "1.0.1"
+drone_docker_runner_enable: "true"
+drone_docker_runner_version: "1.8.0"
+drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"
+
+# server
+drone_logs_debug: "true"
+drone_server_proto: "https"
+drone_server_host: "" # DRONE_SERVER_HOST
+
+# runners
+drone_debug: "true"
+drone_http_proto: "http"
+drone_rpc_host: "192.168.0.11:8080"
+
+# github
+drone_github_client_id: ""     # DRONE_GITHUB_CLIENT_ID
+drone_github_client_secret: "" # DRONE_GITHUB_CLIENT_SECRET

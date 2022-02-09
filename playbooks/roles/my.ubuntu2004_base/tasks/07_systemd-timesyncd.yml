@@ -1,0 +1,11 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: systemd-timesyncd | Put timesyncd.conf
+  template:
+    src: "{{ systemd_timesyncd.config_path }}.j2"
+    dest: "/{{ systemd_timesyncd.config_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_systemd_timesyncd_service

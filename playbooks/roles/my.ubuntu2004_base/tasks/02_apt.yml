@@ -1,0 +1,50 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: apt | Put sources.list
+  template:
+    src: etc/apt/sources.list.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: apt | Ensure lockfile exists
+  stat:
+    path: "/{{ apt.lock_file }}"
+  register: lock_file
+
+- name: apt | Update repositories
+  apt:
+    state: present
+    force_apt_get: true
+    update_cache: yes
+
+- name: apt | Upgrade packages
+  apt:
+    state: present
+    force_apt_get: true
+    upgrade: yes
+  when: not lock_file.stat.exists
+  register: apt_upgrade
+
+- name: apt | Put lockfile
+  file:
+    path: "/{{ apt.lock_file }}"
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  when: apt_upgrade.changed
+
+- name: apt | Install packages
+  apt:
+    name: "{{ apt.install }}"
+    state: present
+    force_apt_get: yes
+
+- name: apt | Uninstall packages
+  apt:
+    name: "{{ apt.uninstall }}"
+    state: absent
+    force_apt_get: yes

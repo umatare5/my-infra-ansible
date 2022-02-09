@@ -1,0 +1,26 @@
+galaxy_info:
+  role_name: drone
+  author: Bo-Yi Wu <appleboy.tw@gmail.com>
+  description: Ansible role to configure drone (server and agent)
+  license: MIT
+
+  min_ansible_version: 2.3
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - xenial
+    - name: Debian
+      versions:
+        - stretch
+
+  galaxy_tags:
+    - drone
+    - docker
+    - ci
+    - droneci
+    - devops
+
+dependencies:
+  - { role: geerlingguy.docker }

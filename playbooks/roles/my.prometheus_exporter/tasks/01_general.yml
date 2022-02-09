@@ -1,0 +1,25 @@
+---
+# Role: my.prometheus_exporter
+
+- name: general | create directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /{{ blackbox_exporter.config_dir }}
+    - /{{ snmp_exporter.config_dir }}
+    - /{{ quotes_exporter.config_dir }}
+
+# - name: prometheus | docker-python
+#   become: true
+#   yum:
+#     name: docker-python
+#     state: present
+
+- name: general | docker network
+  become: true
+  docker_network:
+    name: "{{ docker_network_name }}"
+    state: present

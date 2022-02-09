@@ -1,0 +1,11 @@
+---
+# Role: my.ephemeral_swap
+
+- import_tasks: 01_on.yml
+  tags: "my.ephemeral_swap:on"
+  when:
+    - ansible_memory_mb.nocache.free < ephemeral_swap.memory_free_mega_bytes_required
+    - ansible_memory_mb.swap.free == 0
+
+- import_tasks: 02_off.yml
+  tags: "my.ephemeral_swap:off"

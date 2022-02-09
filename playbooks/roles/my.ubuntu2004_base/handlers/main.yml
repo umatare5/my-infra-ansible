@@ -1,0 +1,30 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: restart_sshd_service
+  systemd:
+    name: sshd.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: restart_systemd_resolved_service
+  systemd:
+    name: systemd-resolved.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: restart_systemd_timesyncd_service
+  systemd:
+    name: systemd-timesyncd.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: restart_systemd_journald_service
+  systemd:
+    name: systemd-journald.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

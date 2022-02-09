@@ -1,0 +1,27 @@
+---
+# Role: my.grafana_stack
+
+- name: general | create directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: nobody
+    mode: 0755
+  with_items:
+    - /{{ cortex.config_dir }}
+    - /{{ cortex.data_dir }}
+    - /{{ grafana.config_dir }}
+    - /{{ grafana.data_dir }}
+
+# - name: prometheus | docker-python
+#   become: true
+#   yum:
+#     name: docker-python
+#     state: present
+
+- name: general | docker network
+  become: true
+  docker_network:
+    name: "{{ docker_network_name }}"
+    state: present

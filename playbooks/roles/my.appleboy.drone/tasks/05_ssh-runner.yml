@@ -1,0 +1,34 @@
+---
+- name: verify that required parameters are set for drone ssh-runner setup
+  fail:
+    msg: "Variable '{{ item }}' is not defined for drone ssh-runner setup"
+  when: item not in vars
+  with_items:
+     - drone_rpc_host
+  tags:
+    - configuration
+
+- name: copy config for drone ssh-runner
+  template:
+    src: "drone-ssh-runner.env.j2"
+    dest: "/etc/drone/drone-ssh-runner.env"
+  register: drone_ssh_runner_config
+  tags:
+    - configuration
+
+- name: run drone ssh-runner
+  docker_container:
+    name: "drone-ssh-runner"
+    image: "drone/drone-runner-ssh:{{ drone_ssh_runner_version }}"
+    networks:
+      - name: "{{ docker_network_name }}"
+    state: started
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /drone/.ssh/:/root/.ssh/:ro
+    env_file: /etc/drone/drone-ssh-runner.env
+#   when: drone_ssh_runner_config is defined and drone_ssh_runner_config.changed
+  tags:
+    - drone-ssh-runner
+    - skip_ansible_lint

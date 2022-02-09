@@ -1,0 +1,72 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: account | Create groups
+  group:
+    name: "{{ item.name }}"
+    gid:  "{{ item.gid }}"
+    state: present
+  with_items: "{{ account.enable_groups }}"
+
+- name: account | Create users
+  user:
+    name: "{{ item.name }}"
+    uid:  "{{ item.uid }}"
+    group: "{{ item.group }}"
+    groups: "{{ item.groups }}"
+    shell: "{{ item.shell }}"
+    state: present
+  with_items: "{{ account.enable_users }}"
+
+- name: account | Create .ssh directories for each users
+  file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: 0700
+  with_items: "{{ account.enable_users }}"
+
+- name: account | Put authorized_keys for each users
+  copy:
+    src: "home/{{ item.name }}/ssh/authorized_keys"
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: 0600
+  with_items: "{{ account.enable_users }}"
+  when: item.has_pubkey
+
+- name: account | Put id_rsa for each users
+  copy:
+    src: "home/{{ item.name }}/ssh/id_rsa"
+    dest: "/home/{{ item.name }}/.ssh/id_rsa"
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: 0600
+    decrypt: yes
+  with_items: "{{ account.enable_users }}"
+  when: item.has_privkey
+
+- name: account | Put known_hosts for each users
+  copy:
+    src: "home/{{ item.name }}/ssh/known_hosts"
+    dest: "/home/{{ item.name }}/.ssh/known_hosts"
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: 0664
+  with_items: "{{ account.enable_users }}"
+  when: item.has_hostkey
+
+- name: account | Remove users
+  user:
+    name: "{{ item.name }}"
+    state: absent
+    remove: yes
+  with_items: "{{ account.disable_users }}"
+
+- name: account | Remove groups
+  group:
+    name: "{{ item.name }}"
+    state: absent
+  with_items: "{{ account.disable_groups }}"

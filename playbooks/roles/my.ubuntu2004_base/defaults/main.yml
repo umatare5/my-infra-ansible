@@ -1,0 +1,59 @@
+---
+# Role: my.ubuntu2004_base
+
+# Preset for sshd role
+general:
+
+# Preset for apt role
+apt:
+  install:
+    - zip
+    - iotop
+    - curl
+    - jq
+    - vim
+    - tree
+    - tcpdump
+    - avahi-daemon
+    - openssh-server
+    - python3-pip     # Manually: pip install docker-py
+  uninstall:
+    - unattended-upgrades
+  lock_file: etc/apt/ansible-upgrade.lock
+
+# Preset for account role
+account:
+  enable_groups:
+    - { name: wheel, gid: 500 }
+    - { name: drone, gid: 600 }
+  disable_groups:
+    - { name: ubuntu }
+  enable_users:
+    - { name: umatare5, uid: 20000, group: "adm",   groups: "adm,wheel", shell: /bin/bash, has_pubkey: true, has_privkey: false, has_hostkey: false }
+    - { name: drone,    uid: 30000, group: "drone", groups: "drone",     shell: /bin/bash, has_pubkey: true, has_privkey: true,  has_hostkey: true }
+  disable_users:
+    - { name: ubuntu }
+
+# Preset for sshd role
+sshd:
+  config_path: etc/ssh/sshd_config
+  allow_users:
+    - umatare5
+    - drone
+  allow_root_addresses:
+    - 192.168.0.0/24
+
+# Preset for sudoers
+sudoers:
+  config_path: etc/sudoers
+
+# Preset for systemd_timesyncd role
+systemd_timesyncd:
+  config_path: etc/systemd/timesyncd.conf
+  peer: ntp.nict.jp
+
+# Preset for systemd_journald role
+systemd_journald:
+  config_path: etc/systemd/journald.conf
+  system_max_use: 100M
+  runtime_max_use: 100M

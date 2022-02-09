@@ -1,0 +1,7 @@
+---
+- hosts: dhcp
+  roles:
+    - my.ephemeral_swap
+    - my.bertvv.dhcp
+  vars:
+    ansible_playbook: dhcp

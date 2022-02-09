@@ -1,0 +1,45 @@
+---
+# Role: my.prometheus_exporter
+
+- name: snmp | ensure blackbox.yml exists
+  stat:
+    path: /{{ blackbox_exporter.config_dir }}/blackbox.yml
+  register: snmp_exporter_config_file
+
+- name: snmp | snmp_exporter configuration file
+  template:
+    dest: /{{ snmp_exporter.config_dir }}/snmp.yml
+    force: true
+    src: "{{ snmp_exporter.config_dir }}/snmp.yml.j2"
+    mode: 0644
+  register: snmp_exporter_configuration
+  when: not snmp_exporter_config_file.stat.exists
+
+- name: snmp | docker snmp_exporter
+  docker_container:
+    command: >
+      --config.file=/{{ snmp_exporter.config_dir }}/snmp.yml
+      {{ snmp_exporter.additional_command_args }}
+    image: prom/snmp-exporter:v{{ snmp_exporter.version }}
+    name: snmp_exporter
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (snmp_exporter.port > 0) | ternary([(snmp_exporter.port | string) + ':9116'], [])
+      }}
+    recreate: "{{ snmp_exporter_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ snmp_exporter.config_dir }}/:/{{ snmp_exporter.config_dir }}:ro
+      - snmp_exporter-data:/snmp_exporter
+  register: snmp_exporter_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: snmp | Ensure docker host file mounts
+  stat:
+    path: /{{ snmp_exporter.config_dir }}/snmp.yml
+  register: snmp_exporter_docker_file_mounts

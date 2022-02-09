@@ -1,0 +1,17 @@
+---
+# Role: my.prometheus_exporter
+
+- name: finalize | return container IPs
+  set_fact:
+    blackbox_exporter_internal_ip: >-
+      {{
+        (blackbox_exporter_container.container | default(
+           blackbox_exporter_container.ansible_facts.docker_container)
+        ).NetworkSettings.IPAddress
+      }}
+    snmp_exporter_internal_ip: >-
+      {{
+        (snmp_exporter_container.container | default(
+           snmp_exporter_container.ansible_facts.docker_container)
+        ).NetworkSettings.IPAddress
+      }}

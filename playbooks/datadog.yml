@@ -1,0 +1,7 @@
+---
+- hosts: datadog
+  roles:
+    - my.ephemeral_swap
+    - datadog.datadog
+  vars:
+    ansible_playbook: datadog

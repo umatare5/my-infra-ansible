@@ -1,0 +1,33 @@
+---
+- name: verify that required parameters are set for drone docker-runner setup
+  fail:
+    msg: "Variable '{{ item }}' is not defined for drone docker-runner setup"
+  when: item not in vars
+  with_items:
+     - drone_rpc_host
+  tags:
+    - configuration
+
+- name: copy config for drone docker-runner
+  template:
+    src: "drone-docker-runner.env.j2"
+    dest: "/etc/drone/drone-docker-runner.env"
+  register: drone_docker_runner_config
+  tags:
+    - configuration
+
+- name: run drone docker-runner
+  docker_container:
+    name: "drone-docker-runner"
+    image: "drone/drone-runner-docker:{{ drone_docker_runner_version }}"
+    networks:
+      - name: "{{ docker_network_name }}"
+    state: started
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: /etc/drone/drone-docker-runner.env
+#  when: drone_docker_runner_config is defined and drone_docker_runner_config.changed
+  tags:
+    - drone-docker-runner
+    - skip_ansible_lint

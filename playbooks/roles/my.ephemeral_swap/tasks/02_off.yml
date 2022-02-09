@@ -1,0 +1,13 @@
+---
+# Role: my.ephemeral_swap
+
+- name: off | Ensure lockfile exists
+  stat:
+    path: "/{{ ephemeral_swap.lock_file }}"
+  register: lock_file
+
+- name: off | Schedule lockfile removal
+  command: /bin/true
+  when: lock_file.stat.exists
+  notify:
+    - deactivate_ephemeral_swap

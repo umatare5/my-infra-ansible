@@ -1,0 +1,10 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: general | Set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: general | Set timezone
+  timezone:
+    name: Asia/Tokyo

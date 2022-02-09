@@ -1,0 +1,23 @@
+---
+# Role: my.ubuntu2004_base
+
+- import_tasks: 01_general.yml
+  tags: "my.ubuntu2004_base:general"
+
+- import_tasks: 02_apt.yml
+  tags: "my.ubuntu2004_base:apt"
+
+- import_tasks: 03_account.yml
+  tags: "my.ubuntu2004_base:account"
+
+- import_tasks: 04_sshd.yml
+  tags: "my.ubuntu2004_base:sshd"
+
+- import_tasks: 05_sudoers.yml
+  tags: "my.ubuntu2004_base:sudoers"
+
+- import_tasks: 06_systemd-journald.yml
+  tags: "my.ubuntu2004_base:journald"
+
+- import_tasks: 07_systemd-timesyncd.yml
+  tags: "my.ubuntu2004_base:timesyncd"

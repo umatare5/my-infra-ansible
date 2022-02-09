@@ -1,0 +1,17 @@
+---
+# Role: my.prometheus_exporter
+
+- import_tasks: 01_general.yml
+  tags: "my.prometheus_exporter:general"
+
+- import_tasks: 02_blackbox.yml
+  tags: "my.prometheus_exporter:blackbox"
+
+- import_tasks: 03_snmp.yml
+  tags: "my.prometheus_exporter:snmp"
+
+- import_tasks: 04_quotes.yml
+  tags: "my.prometheus_exporter:quotes"
+
+- import_tasks: 05_finalize.yml
+  tags: "my.prometheus_exporter:finalize"

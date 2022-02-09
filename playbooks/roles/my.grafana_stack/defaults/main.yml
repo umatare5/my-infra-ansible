@@ -1,0 +1,22 @@
+---
+# Role: my.prometheus_stack
+
+# Docker
+# docker_user_name:
+docker_network_name: grafana
+
+# Alertmanager
+cortex:
+  version: v1.11.0
+  port: 9091
+  additional_command_args: ''
+  config_dir: etc/cortex
+  data_dir: data/cortex
+
+# Grafana
+grafana:
+  version: latest
+  port: 3000
+  additional_command_args: ''
+  config_dir: etc/grafana
+  data_dir: data/grafana

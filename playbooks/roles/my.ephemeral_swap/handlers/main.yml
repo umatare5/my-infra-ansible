@@ -1,0 +1,19 @@
+---
+# Role: my.ephemeral_swap
+
+- name: deactivate_ephemeral_swap
+  command: "swapoff /tmp/swapfile"
+  notify:
+    - remove_ephemeral_swap
+
+- name: remove_ephemeral_swap
+  file:
+    path: "/tmp/swapfile"
+    state: absent
+  notify:
+    - remove_lockfile
+
+- name: remove_lockfile
+  file:
+    path: "/var/lib/ansible/ephemeral-swap.lock"
+    state: absent

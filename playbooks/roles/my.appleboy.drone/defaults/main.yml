@@ -1,0 +1,75 @@
+# general
+docker_network_name: "drone"
+
+# server setting
+drone_server_enable: "false"
+drone_ssh_runner_enable: "false"
+drone_version: "latest"
+drone_runners_enabled: "true"
+drone_logs_pretty: "true"
+drone_logs_color: "true"
+drone_server_host: "http://localhost:8080"
+drone_rpc_server: "http://drone-server"
+drone_runner_capacity: "3"
+drone_host_port: "8080"
+
+# ssh-runner setting
+drone_debug: "false"
+drone_rpc_host: "localhost.localdomain"
+drone_rpc_proto: "http"
+drone_rpc_secret: "foobarbaz"
+
+# github setting
+drone_github_server: "https://github.com"
+drone_github_client_id: ""
+drone_github_client_secret: ""
+drone_github_debug: "false"
+
+# gitlab setting
+drone_gitlab_server: "https://gitlab.com"
+drone_gitlab_client_id: ""
+drone_gitlab_client_secret: ""
+drone_gitlab_skip_verify: "false"
+drone_gitlab_debug: "false"
+
+# gitea setting
+drone_gitea_server: ""
+drone_gitea_client_id: ""
+drone_gitea_client_secret: ""
+drone_gitea_skip_verify: "false"
+drone_gitea_debug: "false"
+
+# bitbucket setting
+drone_bitbucket_client_id: ""
+drone_bitbucket_client_secret: ""
+drone_bitbucket_debug: "false"
+drone_bitbucket_skip_verify: "false"
+
+# database setting
+drone_database_driver: "sqlite"
+drone_sqlite_dir: "/var/lib/drone"
+drone_postgres_data_dir: "/var/lib/postgresql/data"
+drone_postgres_password: "drone"
+drone_postgres_user: "drone"
+drone_postgres_db: "drone"
+drone_mysql_data_dir: "/var/lib/mysql/data"
+drone_mysql_password: "drone"
+drone_mysql_user: "drone"
+drone_mysql_db: "drone"
+
+# S3 Storage
+aws_default_region: "us-east-1"
+aws_region: "us-east-1"
+drone_s3_bucket: ""
+aws_access_key_id: ""
+aws_secret_access_key: ""
+
+# Kubernetes
+drone_kubernetes_enabled: False
+drone_kubernetes_namespace: ""
+drone_kubernetes_config_path: ""
+drone_kubernetes_config_url: ""
+drone_kubernetes_ttl_after_finished: "300"
+drone_kubernetes_service_account: ""
+drone_kubernetes_image_pull: "Always"
+drone_kubernetes_image: ""

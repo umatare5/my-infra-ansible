@@ -1,0 +1,20 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: sshd | Build allow_users string
+  set_fact:
+    allow_users_fact: "{{ sshd.allow_users | join(' ') }}"
+
+- name: sshd | Build allow_root_addresses string
+  set_fact:
+    allow_root_addresses_fact: "{{ sshd.allow_root_addresses | join(',') }}"
+
+- name: sshd | Put sshd_config
+  template:
+    src: "{{ sshd.config_path }}.j2"
+    dest: "/{{ sshd.config_path }}"
+    owner: root
+    group: root
+    mode: 0600
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart_sshd_service

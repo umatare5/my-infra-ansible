@@ -1,0 +1,7 @@
+---
+- hosts: ubuntu2004
+  roles:
+    - my.ephemeral_swap
+    - my.ubuntu2004_base
+  vars:
+    ansible_playbook: ubuntu2004_base

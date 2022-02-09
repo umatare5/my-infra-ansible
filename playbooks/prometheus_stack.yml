@@ -1,0 +1,8 @@
+---
+- hosts: prometheus_stack
+  roles:
+    - my.ephemeral_swap
+    - geerlingguy.docker
+    - my.prometheus_stack
+  vars:
+    ansible_playbook: prometheus_stack

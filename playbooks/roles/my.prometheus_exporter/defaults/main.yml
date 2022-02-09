@@ -1,0 +1,27 @@
+---
+# Role: my.prometheus_stack
+
+# Docker
+# docker_user_name:
+docker_network_name: monitoring
+
+# Blackbox Exporter
+blackbox_exporter:
+  version: 0.19.0
+  port: 9115
+  additional_command_args: ''
+  config_dir: etc/blackbox-exporter
+
+# SNMP Exporter
+snmp_exporter:
+  version: 0.20.0
+  port: 9116
+  additional_command_args: ''
+  config_dir: etc/snmp-exporter
+
+# Quotes Exporter
+quotes_exporter:
+  version: master
+  port: 9340
+  additional_command_args: ''
+  config_dir: etc/quotes-exporter

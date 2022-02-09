@@ -1,0 +1,14 @@
+---
+# Role: my.prometheus_stack
+
+- import_tasks: 01_general.yml
+  tags: "my.grafana_stack:general"
+
+- import_tasks: 02_cortex.yml
+  tags: "my.grafana_stack:cortex"
+
+- import_tasks: 03_grafana.yml
+  tags: "my.grafana_stack:grafana"
+
+- import_tasks: 04_finalize.yml
+  tags: "my.grafana_stack:finalize"

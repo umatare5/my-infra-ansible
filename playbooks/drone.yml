@@ -1,0 +1,8 @@
+---
+- hosts: drone
+  roles:
+    - my.ephemeral_swap
+    - geerlingguy.docker
+    - my.appleboy.drone
+  vars:
+    ansible_playbook: drone

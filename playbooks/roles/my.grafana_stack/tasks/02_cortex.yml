@@ -1,0 +1,47 @@
+---
+# Role: my.grafana_stack
+
+- name: cortex | ensure cortex.ini exists
+  stat:
+    path: /{{ cortex.config_dir }}/cortex.ini
+  register: cortex_config_file
+
+- name: cortex | cortex configuration file
+  template:
+    dest: /{{ item }}
+    force: true
+    src: "{{ item }}.j2"
+    mode: 0644
+  register: cortex_configuration
+  with_items:
+    - "{{ cortex.config_dir }}/cortex.yml"
+  when: not cortex_config_file.stat.exists
+
+- name: cortex | docker cortex
+  docker_container:
+    command: >
+      -config.file={{ cortex.config_dir }}/cortex.yml
+      {{ cortex.additional_command_args }}
+    image: cortexproject/cortex:{{ cortex.version }}
+    name: cortex
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (cortex.port > 0) | ternary([(cortex.port | string) + ':9091'], [])
+      }}
+    recreate: "{{ cortex_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ cortex.config_dir }}/:/{{ cortex.config_dir }}:ro
+      - /{{ cortex.data_dir }}/:/cortex/:rw
+  register: cortex_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: cortex | check docker host file mounts
+  stat:
+    path: /{{ cortex.config_dir }}/cortex.yml
+  register: cortex_docker_file_mounts

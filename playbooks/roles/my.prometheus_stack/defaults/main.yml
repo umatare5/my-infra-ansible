@@ -1,0 +1,25 @@
+---
+# Role: my.prometheus_stack
+
+# Docker
+# docker_user_name:
+docker_network_name: monitoring
+
+# Prometheus
+prometheus:
+  version: latest
+  port: 9090
+  additional_command_args: ''
+  config_dir: etc/prometheus
+  data_dir: data/prometheus
+  library_dir: usr/share/prometheus
+  static_targets:
+  - 'localhost:9090'
+
+# Alertmanager
+alertmanager:
+  version: latest
+  port: 9093
+  additional_command_args: ''
+  config_dir: etc/alertmanager
+  data_dir: data/alertmanager

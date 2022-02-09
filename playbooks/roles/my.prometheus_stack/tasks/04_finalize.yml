@@ -1,0 +1,17 @@
+---
+# Role: my.prometheus_stack
+
+- name: finalize | return container IPs
+  set_fact:
+    prometheus_internal_ip: >-
+      {{
+        (prometheus_container.container | default(
+           _prometheus_container.ansible_facts.docker_container)
+        ).NetworkSettings.IPAddress
+      }}
+    prometheus_alertmanager_internal_ip: >-
+      {{
+        (alertmanager_container.container | default(
+           _alertmanager_container.ansible_facts.docker_container)
+        ).NetworkSettings.IPAddress
+      }}

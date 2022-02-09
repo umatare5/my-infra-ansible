@@ -1,0 +1,4 @@
+.vaultPassword
+.DS_Store
+environments/lab1/group_vars/datadog.yml
+environments/lab1/group_vars/drone.yml

@@ -1,0 +1,63 @@
+---
+# Role: my.prometheus_stack
+
+- name: prometheus | ensure prometheus.yml exists
+  stat:
+    path: /{{ prometheus.config_dir }}/prometheus.yml
+  register: prometheus_config_file
+
+- name: prometheus | create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /{{ prometheus.config_dir }}/rules
+    - /{{ prometheus.config_dir }}/targets
+  when: not prometheus_config_file.stat.exists
+
+- name: prometheus | prometheus configuration file
+  # become: true
+  template:
+    dest: /{{ prometheus.config_dir }}/prometheus.yml
+    force: true
+    src: "{{ prometheus.config_dir }}/prometheus.yml.j2"
+    mode: 0644
+  register: prometheus_configuration
+  when: not prometheus_config_file.stat.exists
+
+- name: prometheus | docker prometheus
+  # become: true
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:{{ prometheus.version }}
+    networks:
+      - name: "{{ docker_network_name }}"
+    command: >
+      --config.file=/{{ prometheus.config_dir }}/prometheus.yml
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.retention.time=90d
+      --web.console.libraries=/{{ prometheus.library_dir }}/console_libraries
+      --web.console.templates=/{{ prometheus.library_dir }}/consoles
+      {{ prometheus.additional_command_args }}
+    published_ports: >-
+      {{
+        (prometheus.port > 0) | ternary([(prometheus.port | string) + ':9090'], [])
+      }}
+    recreate: "{{ prometheus_configuration.changed }}"
+    restart_policy: always
+    state: started
+    user: "{{ docker_user_name | default(omit) }}"
+    volumes:
+      - /{{ prometheus.config_dir }}/:/{{ prometheus.config_dir }}/:ro
+      - /{{ prometheus.data_dir }}:/prometheus/:rw
+      - /etc/hosts:/etc/hosts:ro
+  register: prometheus_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: prometheus | check docker host file mounts
+  stat:
+    path: /{{ prometheus.config_dir }}/prometheus.yml
+  register: prometheus_docker_file_mounts

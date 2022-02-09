@@ -1,0 +1,45 @@
+{% if ansible_architecture == 'x86_64' %}
+deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse
+
+deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse
+
+deb http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+
+deb http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
+
+deb http://archive.canonical.com/ubuntu focal partner
+deb-src http://archive.canonical.com/ubuntu focal partner
+
+deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+
+{% elif ansible_architecture == 'aarch64' %}
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to newer versions of the distribution.
+deb http://ports.ubuntu.com/ubuntu-ports focal main restricted
+
+## Major bug fix updates produced after the final release of the distribution.
+deb http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted
+
+## Software in universe WILL NOT receive any review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports focal universe
+deb http://ports.ubuntu.com/ubuntu-ports focal-updates universe
+
+## Software in multiverse WILL NOT receive any review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports focal multiverse
+deb http://ports.ubuntu.com/ubuntu-ports focal-updates multiverse
+
+## Software in backports WILL NOT receive any review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse
+
+## Security updates produced after the final release of the distribution.
+deb http://ports.ubuntu.com/ubuntu-ports focal-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports focal-security universe
+deb http://ports.ubuntu.com/ubuntu-ports focal-security multiverse
+deb http://ports.ubuntu.com/ubuntu-ports focal-proposed restricted main multiverse universe
+
+deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
+
+{%- endif -%}

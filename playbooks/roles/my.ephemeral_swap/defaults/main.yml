@@ -1,0 +1,9 @@
+---
+# Role: my.ephemeral_swap
+
+ephemeral_swap:
+  memory_free_mega_bytes_required: 512
+  filesystem_free_kilo_bytes_required: 1000000
+  size: 512 # Mega Bytes
+  name: swapfile                     # Re-define in handler
+  lock_file: tmp/ephemeral-swap.lock # Re-define in handler

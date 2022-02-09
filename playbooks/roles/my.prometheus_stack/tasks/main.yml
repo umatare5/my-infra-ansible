@@ -1,0 +1,14 @@
+---
+# Role: my.prometheus_stack
+
+- import_tasks: 01_general.yml
+  tags: "my.prometheus_stack:general"
+
+- import_tasks: 02_prometheus.yml
+  tags: "my.prometheus_stack:prometheus"
+
+- import_tasks: 03_alertmanager.yml
+  tags: "my.prometheus_stack:alertmanager"
+
+- import_tasks: 04_finalize.yml
+  tags: "my.prometheus_stack:finalize"

@@ -1,0 +1,35 @@
+---
+# Role: my.ephemeral_swap
+
+- name: on | Gathering /tmp freespace
+  shell: df /tmp --output\=avail | tail -1
+  register: tmp_freespace
+
+- name: on | Ensure /tmp freespace
+  fail:
+    msg: "/tmp does not have the minimum space required to continue."
+  when:
+    - tmp_freespace.stdout|float < ephemeral_swap.filesystem_free_kilo_bytes_required
+
+- name: on | Ensure ephemeral-swap.lock exists
+  stat:
+    path: "/{{ ephemeral_swap.lock_file }}"
+  register: lock_file
+
+- name: on | Create /tmp/swapfile
+  command: "dd if=/dev/zero of=/tmp/{{ ephemeral_swap.name }} \
+            bs=1M count={{ ephemeral_swap.size }}"
+
+- name: on | Set /tmp/swapfile to swap
+  command: "mkswap /tmp/{{ ephemeral_swap.name }}"
+
+- name: on | Activate swap
+  command: "swapon /tmp/{{ ephemeral_swap.name }}"
+
+- name: on | Create lockfile
+  file:
+    path: "/{{ ephemeral_swap.lock_file }}"
+    state: touch
+    owner: root
+    group: root
+    mode: 0644

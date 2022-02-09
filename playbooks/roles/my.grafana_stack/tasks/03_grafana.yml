@@ -1,0 +1,47 @@
+---
+# Role: my.grafana_stack
+
+- name: grafana | ensure grafana.ini exists
+  stat:
+    path: /{{ grafana.config_dir }}/grafana.ini
+  register: grafana_config_file
+
+- name: grafana | grafana configuration file
+  template:
+    dest: /{{ item }}
+    force: true
+    src: "{{ item }}.j2"
+    mode: 0644
+  register: grafana_configuration
+  with_items:
+    - "{{ grafana.config_dir }}/grafana.ini"
+    - "{{ grafana.config_dir }}/ldap.toml"
+  when: not grafana_config_file.stat.exists
+
+- name: grafana | docker grafana
+  docker_container:
+    command: >
+      {{ grafana.additional_command_args }}
+    image: grafana/grafana:{{ grafana.version }}
+    name: grafana
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (grafana.port > 0) | ternary([(grafana.port | string) + ':3000'], [])
+      }}
+    recreate: "{{ grafana_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ grafana.config_dir }}/:/{{ grafana.config_dir }}:ro
+      - /{{ grafana.data_dir }}/:/grafana/:rw
+  register: grafana_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: grafana | check docker host file mounts
+  stat:
+    path: /{{ grafana.config_dir }}/grafana.ini
+  register: grafana_docker_file_mounts

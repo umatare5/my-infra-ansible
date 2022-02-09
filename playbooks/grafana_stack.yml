@@ -1,0 +1,8 @@
+---
+- hosts: grafana_stack
+  roles:
+    - my.ephemeral_swap
+    - geerlingguy.docker
+    - my.grafana_stack
+  vars:
+    ansible_playbook: grafana_stack

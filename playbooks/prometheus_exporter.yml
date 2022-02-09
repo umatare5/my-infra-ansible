@@ -1,0 +1,7 @@
+---
+- hosts: prometheus_exporter
+  roles:
+    - my.ephemeral_swap
+    - my.prometheus_exporter
+  vars:
+    ansible_playbook: prometheus_exporter

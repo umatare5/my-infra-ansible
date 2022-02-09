@@ -1,0 +1,11 @@
+---
+# Role: my.ubuntu2004_base
+
+- name: sudoers | Put sudoers
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+    owner: root
+    group: root
+    mode: 0440
+  with_items: "{{ sudoers.config_path }}"
