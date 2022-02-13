@@ -5,6 +5,10 @@ my-infra-ansible manages server infrastructure in my labo.
 - This repository is used for monitoring using on-premises resources.
 - If you hope to use Serverless, please refer to [fargate-prometheus-boilerplate](https://github.com/umatare5/fargate-prometheus-boilerplate).
 
+## Overview
+
+![Overview](https://github.com/umatare5/my-infra-ansible/blob/images/diagram.png)
+
 ## Commands
 
 | Command                    | Description                                           |
