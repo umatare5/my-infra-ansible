@@ -15,7 +15,7 @@ my-infra-ansible manages server infrastructure in my labo.
 | -------------------------- | ----------------------------------------------------- |
 | `make ubuntu2004`          | Prepare base configurations on Ubuntu 20.04.          |
 | `make prometheus-exporter` | Setup Prometheus exporters on server.                 |
-| `make prometheus-stack`    | Setup Prometheus, Alertmanager and Grafana on docker. |
+| `make prometheus-stack`    | Setup Prometheus and Alertmanager on docker. |
 | `make grafana-stack`       | Setup Grafana and Cortex.                             |
 | `make drone`               | Setup Drone CI Server and Runners on docker.          |
 | `make datadog`             | Setup Datadog Agent on server.                        |
