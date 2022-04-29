@@ -1,5 +1,5 @@
 ---
-# Role: my.prometheus_stack
+# Role: my.grafana_stack
 
 # Docker
 # docker_user_name:
@@ -12,6 +12,13 @@ cortex:
   additional_command_args: ''
   config_dir: etc/cortex
   data_dir: data/cortex
+
+# Mimir
+mimir_version: 2.0.0
+mimir_port: 9009
+mimir_additional_command_args: '-config.file /etc/mimir/standalone.yaml'
+mimir_config_dir: etc/mimir
+mimir_data_dir: data/mimir
 
 # Grafana
 grafana:

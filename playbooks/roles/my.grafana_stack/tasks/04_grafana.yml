@@ -16,7 +16,6 @@
   with_items:
     - "{{ grafana.config_dir }}/grafana.ini"
     - "{{ grafana.config_dir }}/ldap.toml"
-  when: not grafana_config_file.stat.exists
 
 - name: grafana | docker grafana
   docker_container:

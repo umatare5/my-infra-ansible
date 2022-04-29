@@ -15,7 +15,6 @@
   register: cortex_configuration
   with_items:
     - "{{ cortex.config_dir }}/cortex.yml"
-  when: not cortex_config_file.stat.exists
 
 - name: cortex | docker cortex
   docker_container:

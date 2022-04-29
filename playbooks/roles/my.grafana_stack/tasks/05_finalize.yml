@@ -9,9 +9,15 @@
            _cortex_container.ansible_facts.docker_container)
         ).NetworkSettings.IPAddress
       }}
-    cortex_grafana_internal_ip: >-
+    grafana_internal_ip: >-
       {{
         (grafana_container.container | default(
            _grafana_container.ansible_facts.docker_container)
+        ).NetworkSettings.IPAddress
+      }}
+    mimir_internal_ip: >-
+      {{
+        (mimir_container.container | default(
+           _mimir_container.ansible_facts.docker_container)
         ).NetworkSettings.IPAddress
       }}

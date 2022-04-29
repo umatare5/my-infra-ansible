@@ -1,0 +1,45 @@
+---
+# Role: my.grafana_stack
+
+- name: mimir | ensure standalone.yaml exists
+  stat:
+    path: /{{ mimir_config_dir }}/standalone.yaml
+  register: mimir_config_file
+
+- name: mimir | mimir configuration file
+  template:
+    dest: /{{ item }}
+    force: true
+    src: "{{ item }}.j2"
+    mode: 0644
+  register: mimir_configuration
+  with_items:
+    - "{{ mimir_config_dir }}/standalone.yaml"
+
+- name: mimir | docker mimir
+  docker_container:
+    command: >
+      {{ mimir_additional_command_args }}
+    image: grafana/mimir:{{ mimir_version }}
+    name: mimir
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (mimir_port > 0) | ternary([(mimir_port | string) + ':9009'], [])
+      }}
+    recreate: "{{ mimir_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ mimir_config_dir }}/:/{{ mimir_config_dir }}:ro
+      - /{{ mimir_data_dir }}/:/mimir/:rw
+  register: mimir_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: mimir | check docker host file mounts
+  stat:
+    path: /{{ mimir_config_dir }}/standalone.yaml
+  register: mimir_docker_file_mounts

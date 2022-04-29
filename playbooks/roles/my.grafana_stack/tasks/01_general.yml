@@ -11,6 +11,8 @@
   with_items:
     - /{{ cortex.config_dir }}
     - /{{ cortex.data_dir }}
+    - /{{ mimir_config_dir }}
+    - /{{ mimir_data_dir }}
     - /{{ grafana.config_dir }}
     - /{{ grafana.data_dir }}
 
