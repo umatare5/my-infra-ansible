@@ -1,11 +1,6 @@
 ---
 # Role: my.prometheus_exporter
 
-- name: snmp | ensure blackbox.yml exists
-  stat:
-    path: /{{ blackbox_exporter.config_dir }}/blackbox.yml
-  register: snmp_exporter_config_file
-
 - name: snmp | snmp_exporter configuration file
   template:
     dest: /{{ snmp_exporter.config_dir }}/snmp.yml
@@ -13,7 +8,6 @@
     src: "{{ snmp_exporter.config_dir }}/snmp.yml.j2"
     mode: 0644
   register: snmp_exporter_configuration
-  when: not snmp_exporter_config_file.stat.exists
 
 - name: snmp | docker snmp_exporter
   docker_container:

@@ -1,0 +1,42 @@
+---
+# Role: my.prometheus_exporter
+
+- name: json_python | ensure tooth.json exists
+  stat:
+    path: /{{ json_exporter.config_dir }}/tooth.json
+
+- name: json | json_exporter_python configuration file
+  template:
+    dest: /{{ json_exporter.config_dir }}/tooth.json
+    force: true
+    src: "{{ json_exporter.config_dir }}/tooth.json.j2"
+    mode: 0644
+  register: json_exporter_python_configuration
+
+- name: json | docker json_exporter_python
+  docker_container:
+    command: >
+      {{ json_exporter_python.additional_command_args }}
+    image: docker.io/library/python:{{ json_exporter_python.version }}
+    name: json_exporter_python
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (json_exporter_python.port > 0) | ternary([(json_exporter_python.port | string) + ':8000'], [])
+      }}
+    recreate: "{{ json_exporter_python_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ json_exporter.config_dir }}/:/{{ json_exporter.config_dir }}:ro
+      - json_exporter-data:/json_exporter
+  register: json_exporter_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: json | Ensure docker host file mounts
+  stat:
+    path: /{{ json_exporter.config_dir }}/tooth.json
+  register: json_exporter_docker_file_mounts

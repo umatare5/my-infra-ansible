@@ -1,7 +1,7 @@
 ---
 # Role: my.prometheus_exporter
 
-- name: blackbox | ensure blackbox.yml exists
+- name: blackbox | ensure blackbox.yml deployed by Drone
   stat:
     path: /{{ blackbox_exporter.config_dir }}/blackbox.yml
   register: blackbox_exporter_config_file

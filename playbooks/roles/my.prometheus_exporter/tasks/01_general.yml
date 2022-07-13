@@ -9,6 +9,7 @@
     mode: 0755
   with_items:
     - /{{ blackbox_exporter.config_dir }}
+    - /{{ json_exporter.config_dir }}
     - /{{ snmp_exporter.config_dir }}
     - /{{ quotes_exporter.config_dir }}
 

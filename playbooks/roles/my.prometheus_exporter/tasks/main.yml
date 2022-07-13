@@ -13,5 +13,11 @@
 - import_tasks: 04_quotes.yml
   tags: "my.prometheus_exporter:quotes"
 
-- import_tasks: 05_finalize.yml
+- import_tasks: 05_json.yml
+  tags: "my.prometheus_exporter:json"
+
+- import_tasks: 06_json_python.yml
+  tags: "my.prometheus_exporter:json_python"
+
+- import_tasks: 07_finalize.yml
   tags: "my.prometheus_exporter:finalize"
