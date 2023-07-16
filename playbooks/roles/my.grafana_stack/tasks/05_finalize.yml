@@ -3,12 +3,6 @@
 
 - name: finalize | return container IPs
   set_fact:
-    cortex_internal_ip: >-
-      {{
-        (cortex_container.container | default(
-           _cortex_container.ansible_facts.docker_container)
-        ).NetworkSettings.IPAddress
-      }}
     grafana_internal_ip: >-
       {{
         (grafana_container.container | default(

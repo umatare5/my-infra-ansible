@@ -4,8 +4,8 @@
 - import_tasks: 01_general.yml
   tags: "my.grafana_stack:general"
 
-- import_tasks: 02_cortex.yml
-  tags: "my.grafana_stack:cortex"
+# - import_tasks: 02_cortex.yml
+#   tags: "my.grafana_stack:cortex"
 
 - import_tasks: 03_mimir.yml
   tags: "my.grafana_stack:mimir"

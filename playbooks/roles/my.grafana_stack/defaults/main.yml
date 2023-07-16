@@ -14,7 +14,7 @@ cortex:
   data_dir: data/cortex
 
 # Mimir
-mimir_version: 2.0.0
+mimir_version: latest
 mimir_port: 9009
 mimir_additional_command_args: '-config.file /etc/mimir/standalone.yaml'
 mimir_config_dir: etc/mimir
