@@ -35,6 +35,8 @@
     volumes:
       - /{{ quotes_exporter.config_dir }}/:/{{ quotes_exporter.config_dir }}:ro
       - quotes_exporter-data:/quotes_exporter
+    env:
+      TWELVEDATA_API_KEY: "{{ quotes_exporter_twelvedata_api_key }}"
   register: quotes_exporter_container
 
 # In certain situations if a manual change means Prometheus in Docker

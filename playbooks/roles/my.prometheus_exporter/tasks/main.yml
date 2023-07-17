@@ -19,5 +19,8 @@
 - import_tasks: 06_json_python.yml
   tags: "my.prometheus_exporter:json_python"
 
-- import_tasks: 07_finalize.yml
+- import_tasks: 07_remo.yml
+  tags: "my.prometheus_exporter:remo"
+
+- import_tasks: 08_finalize.yml
   tags: "my.prometheus_exporter:finalize"

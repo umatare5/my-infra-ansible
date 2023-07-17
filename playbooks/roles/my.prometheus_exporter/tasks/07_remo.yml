@@ -1,0 +1,39 @@
+---
+# Role: my.prometheus_exporter
+
+- name: remo | remo_exporter configuration file
+  template:
+    dest: /{{ remo_exporter.config_dir }}/remo.yml
+    force: true
+    src: "{{ remo_exporter.config_dir }}/remo.yml.j2"
+    mode: 0644
+  register: remo_exporter_configuration
+
+- name: remo | docker remo_exporter
+  docker_container:
+    command: >
+      {{ remo_exporter.additional_command_args }}
+    image: kenfdev/remo-exporter:{{ remo_exporter.version }}
+    name: remo_exporter
+    networks:
+      - name: "{{ docker_network_name }}"
+    published_ports: >-
+      {{
+        (remo_exporter.port > 0) | ternary([(remo_exporter.port | string) + ':9352'], [])
+      }}
+    recreate: "{{ remo_exporter_configuration.changed }}"
+    restart_policy: always
+    state: started
+    volumes:
+      - /{{ remo_exporter.config_dir }}/:/{{ remo_exporter.config_dir }}:ro
+    env:
+      OAUTH_TOKEN_FILE: /{{ remo_exporter.config_dir }}/remo.yml
+  register: remo_exporter_container
+
+# In certain situations if a manual change means Prometheus in Docker
+# auto restarted but a host mounted file wasn't present it'll be auto
+# created as a directory instead of a file.
+- name: remo | Ensure docker host file mounts
+  stat:
+    path: /{{ remo_exporter.config_dir }}/remo.yml
+  register: remo_exporter_docker_file_mounts

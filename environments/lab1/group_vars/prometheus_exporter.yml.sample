@@ -1,0 +1,5 @@
+# quotes_exporter
+quotes_exporter_twelvedata_api_key: ""
+
+# remo_exporter
+remo_exporter_access_token: "" # Access token issued at https://home.nature.global/home
