@@ -20,11 +20,11 @@ snmp_exporter:
   config_dir: etc/snmp-exporter
 
 # Quotes Exporter
-quotes_exporter:
-  version: master
-  port: 9340
-  additional_command_args: '--enable-twelvedata'
-  config_dir: etc/quotes-exporter
+twelvedata_exporter:
+  version: main
+  port: 9341
+  additional_command_args: ''
+  config_dir: etc/twelvedata-exporter
 
 # JSON Exporter
 json_exporter:

@@ -1,48 +1,48 @@
 ---
 # Role: my.prometheus_exporter
 
-- name: quotes | Clone umatare5/quotes_exporter
+- name: twelvedata | Clone umatare5/twelvedata_exporter
   git:
-    repo: https://github.com/umatare5/quotes-exporter.git
-    dest: /tmp/quotes-exporter
-    version: "{{ quotes_exporter.version }}"
+    repo: git@github.com:umatare5/twelvedata-exporter.git
+    dest: /tmp/twelvedata-exporter
+    version: "{{ twelvedata_exporter.version }}"
     accept_hostkey: yes
     force: yes
 
-- name: quotes | Build quotes_exporter
+- name: twelvedata | Build twelvedata_exporter
   docker_image:
     build:
-      path: /tmp/quotes-exporter
-    name: umatare5/quotes-exporter
-    tag: "{{ quotes_exporter.version }}"
+      path: /tmp/twelvedata-exporter
+    name: umatare5/twelvedata-exporter
+    tag: "{{ twelvedata_exporter.version }}"
     push: no
     source: build
 
-- name: quotes | docker quotes_exporter
+- name: twelvedata | docker twelvedata_exporter
   docker_container:
     command: >
-      {{ quotes_exporter.additional_command_args }}
-    image: umatare5/quotes-exporter:{{ quotes_exporter.version }}
-    name: quotes_exporter
+      {{ twelvedata_exporter.additional_command_args }}
+    image: umatare5/twelvedata-exporter:{{ twelvedata_exporter.version }}
+    name: twelvedata_exporter
     networks:
       - name: "{{ docker_network_name }}"
     published_ports: >-
       {{
-        (quotes_exporter.port > 0) | ternary([(quotes_exporter.port | string) + ':9340'], [])
+        (twelvedata_exporter.port > 0) | ternary([(twelvedata_exporter.port | string) + ':9341'], [])
       }}
     restart_policy: always
     state: started
     volumes:
-      - /{{ quotes_exporter.config_dir }}/:/{{ quotes_exporter.config_dir }}:ro
-      - quotes_exporter-data:/quotes_exporter
+      - /{{ twelvedata_exporter.config_dir }}/:/{{ twelvedata_exporter.config_dir }}:ro
+      - twelvedata_exporter-data:/twelvedata_exporter
     env:
-      TWELVEDATA_API_KEY: "{{ quotes_exporter_twelvedata_api_key }}"
-  register: quotes_exporter_container
+      TWELVEDATA_API_KEY: "{{ twelvedata_exporter_api_key }}"
+  register: twelvedata_exporter_container
 
 # In certain situations if a manual change means Prometheus in Docker
 # auto restarted but a host mounted file wasn't present it'll be auto
 # created as a directory instead of a file.
-- name: quotes | Ensure docker host file mounts
+- name: twelvedata | Ensure docker host file mounts
   stat:
-    path: /{{ quotes_exporter.config_dir }}/quotes.yml
-  register: quotes_exporter_docker_file_mounts
+    path: /{{ twelvedata_exporter.config_dir }}/twelvedata.yml
+  register: twelvedata_exporter_docker_file_mounts

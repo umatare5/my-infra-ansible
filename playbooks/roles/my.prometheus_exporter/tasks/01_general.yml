@@ -11,7 +11,7 @@
     - /{{ blackbox_exporter.config_dir }}
     - /{{ json_exporter.config_dir }}
     - /{{ snmp_exporter.config_dir }}
-    - /{{ quotes_exporter.config_dir }}
+    - /{{ twelvedata_exporter.config_dir }}
     - /{{ remo_exporter.config_dir }}
 
 # - name: prometheus | docker-python
